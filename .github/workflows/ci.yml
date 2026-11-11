@@ -1,0 +1,53 @@
+name: FEATHER FPS - CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: feather-fps-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core-tests:
+    name: Core and UI Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Java JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Verify Java
+        run: java -version
+
+      - name: Compile and run Core Tests
+        run: |
+          chmod +x ./build-core.sh
+          ./build-core.sh
+
+      - name: Validate Fabric metadata
+        run: |
+          python3 -m json.tool fabric/src/main/resources/fabric.mod.json > /dev/null
+          echo "Fabric metadata JSON is valid."
+
+      - name: Verify required project files
+        run: |
+          test -f README.md
+          test -f CHANGELOG.md
+          test -f docs/SUPPORT_MATRIX.md
+          test -f core/build.gradle
+          test -f fabric/build.gradle
+          echo "Required project files verified."
