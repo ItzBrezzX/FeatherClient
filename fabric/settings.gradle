@@ -1,0 +1,9 @@
+// UNVERIFIED DRAFT - never run. Standalone Gradle build so the verified core build is unaffected.
+pluginManagement {
+    repositories {
+        maven { name = 'Fabric'; url = 'https://maven.fabricmc.net/' }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+rootProject.name = 'feather-fps-fabric'

@@ -1,0 +1,23 @@
+// NOTE: This Gradle file has NOT been executed (no Gradle was available when it was written).
+// The verified build path is ./build-core.sh at the project root.
+plugins {
+    id 'java-library'
+}
+
+java {
+    toolchain { languageVersion = JavaLanguageVersion.of(21) } // 1.21.x needs Java 21; Java 25 runs Java 21 bytecode for 26.x
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:all'
+}
+
+// Runs the dependency-free test runner.
+tasks.register('coreTests', JavaExec) {
+    dependsOn classes
+    classpath = sourceSets.main.runtimeClasspath + sourceSets.test.output
+    mainClass = 'dev.kingbrezz.featherfps.core.CoreTests'
+}
+tasks.named('coreTests') { dependsOn testClasses }
