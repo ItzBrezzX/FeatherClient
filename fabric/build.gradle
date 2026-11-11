@@ -1,0 +1,42 @@
+// UNVERIFIED DRAFT - never run. Needs network, a Gradle version supported by Loom, and JDK 21.
+plugins {
+    id 'fabric-loom' version "${loom_version}"
+}
+
+version = project.mod_version
+group = 'dev.kingbrezz.featherfps'
+
+base {
+    // Produces e.g. feather-fps-fabric-1.21.11-0.2.0-dev.jar
+    archivesName = "feather-fps-fabric-${project.minecraft_version}"
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+}
+
+// The loader-independent core is compiled straight into the mod jar (no nested jar needed).
+sourceSets {
+    main {
+        java { srcDir '../core/src/main/java' }
+    }
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand 'version': project.version }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
+    options.encoding = 'UTF-8'
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}

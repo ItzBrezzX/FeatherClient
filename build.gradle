@@ -1,0 +1,5 @@
+// Root build: intentionally minimal. Shared settings live in each module.
+allprojects {
+    group = 'dev.kingbrezz.featherfps'
+    version = '0.2.0-dev'
+}

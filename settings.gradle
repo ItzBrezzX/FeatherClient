@@ -1,0 +1,4 @@
+rootProject.name = 'feather-fps'
+include 'core'
+// Loader/version modules (fabric, forge, neoforge, quilt) are NOT included yet: they cannot be built or tested
+// in the environment this project was started in. See docs/SUPPORT_MATRIX.md and docs/NEXT_STEPS.md.
